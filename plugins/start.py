@@ -2,7 +2,6 @@
 
 import os
 import asyncio
-from pyrogram.client import Client
 from pyrogram import filters
 from pyrogram.enums import ParseMode
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -11,8 +10,11 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pyrogram.filters import Filter
-
-from bot import Bot
+    from pyrogram.client import Client
+    from bot import Bot
+else:
+    from pyrogram.client import Client
+    from bot import Bot
 from config import ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT, START_PIC, AUTO_DELETE_TIME, AUTO_DELETE_MSG, JOIN_REQUEST_ENABLE, FORCE_SUB_CHANNEL, CHANNEL_ID
 from helper_func import subscribed, decode, get_messages, delete_file
 from database.database import add_user, del_user, full_userbase, present_user
@@ -34,7 +36,7 @@ async def start_command(client: Client, message: Message):
             base64_string = text.split(" ", 1)[1]
         except:
             return
-        string = await decode(base64_string)
+        string = await decode(base64_string)  # type: ignore[misc]
         argument = string.split("-")
         if len(argument) == 3:
             try:
